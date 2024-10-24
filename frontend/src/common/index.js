@@ -1,4 +1,4 @@
-const backendDomin = "https://controlpaneladminkanistores-314lzpovc-indhiran-gods-projects.vercel.app";
+const backendDomin = REACT_APP_BACKEND_URL
 
 const SummaryApi = {
     signUP: {
