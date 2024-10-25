@@ -8,34 +8,18 @@ const router = require('./routes');
 
 const app = express();
 
-<<<<<<< HEAD
-// CORS configuration
-=======
 // Define allowed origins
 const allowedOrigins = ['https://administrator-a9im-eex8lylu7-indhiran-gods-projects.vercel.app'];
 
-// CORS Configuration
->>>>>>> 7d8001d5746fe9a779a81cdac96de25a72c72c19
+// CORS configuration
 app.use(cors({
-    origin: process.env.FRONTEND_URL,  // Allow your frontend URL
-    credentials: true,  // Allow credentials like cookies
+    origin: allowedOrigins,  // Allow your frontend URL
+    credentials: true,       // Allow credentials like cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-<<<<<<< HEAD
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 // Middleware
-app.use(cookieParser());
-app.use(express.json());
-
-// API Routes
-app.use("/api", router);
-=======
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    credentials: true  // Allow credentials like cookies
-}));
-
-// Middleware for parsing cookies and JSON bodies
 app.use(cookieParser());
 app.use(express.json());
 
@@ -51,18 +35,11 @@ app.use((req, res, next) => {
 // Handle CORS preflight requests across all routes
 app.options('*', cors());  // Preflight for all routes
 
-// API Routes with correct headers for Vercel deployment
-app.use("/api", (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL); // Ensure Vercel sends the correct origin
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    next();
-}, router);
+// API Routes
+app.use("/api", router);
 
 // Set port for Vercel environment
-const PORT = 8080;
->>>>>>> 7d8001d5746fe9a779a81cdac96de25a72c72c19
+const PORT = process.env.PORT || 8080; // Use PORT from environment variable or default to 8080
 
 // Start server and connect to DB
 connectDB().then(() => {
