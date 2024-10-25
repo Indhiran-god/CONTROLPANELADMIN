@@ -12,7 +12,7 @@ const app = express();
 // CORS configuration
 =======
 // Define allowed origins
-const allowedOrigins = [process.env.FRONTEND_URL];
+const allowedOrigins = ['https://administrator-a9im-eex8lylu7-indhiran-gods-projects.vercel.app'];
 
 // CORS Configuration
 >>>>>>> 7d8001d5746fe9a779a81cdac96de25a72c72c19
