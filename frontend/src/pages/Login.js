@@ -1,16 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import Context from '../context';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-  });
+  const [data, setData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
   const { fetchUserDetails } = useContext(Context);
 
@@ -27,11 +24,9 @@ const Login = () => {
   
     try {
       const response = await fetch(SummaryApi.signIn.url, {
-        method: SummaryApi.signIn.method,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: "POST",
+        credentials: 'include',  // Important for cookies
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
   
@@ -39,11 +34,9 @@ const Login = () => {
   
       if (dataApi.success) {
         toast.success(dataApi.message);
-        if (fetchUserDetails) {
-          fetchUserDetails(); // Fetch user details after successful login
-        }
-        navigate('/'); // Navigate to homepage
-        window.location.reload(); // Refresh the page
+        fetchUserDetails();  // Fetch user details after successful login
+        navigate('/');       // Navigate to homepage
+        window.location.reload();  // Reload to apply changes
       } else {
         toast.error(dataApi.message || 'Login failed. Please try again.');
       }
@@ -52,15 +45,11 @@ const Login = () => {
       toast.error('Something went wrong. Please try again later.');
     }
   };
-  
 
   return (
     <section id="login">
       <div className="mx-auto container p-4">
         <div className="bg-white p-5 w-full max-w-sm mx-auto">
-          <div className="w-20 max-h-20 mx-auto">
-          </div>
-
           <form className="pt-6 flex flex-col gap-2" onSubmit={handleSubmit}>
             <div className="grid">
               <label>Email:</label>
@@ -105,8 +94,6 @@ const Login = () => {
               Login
             </button>
           </form>
-
-          
         </div>
       </div>
     </section>
