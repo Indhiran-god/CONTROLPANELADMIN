@@ -2,20 +2,24 @@ const jwt = require('jsonwebtoken');
 
 async function authToken(req, res, next) {
     try {
-        const token = req.cookies?.token || req.headers['authorization']?.split(" ")[1]; // Check cookie or Authorization header
+        // Extract token from cookie or Authorization header
+        const token = req.cookies?.token || req.headers['authorization']?.split(" ")[1];
         
-        console.log("token", token);
+        console.log("Extracted Token:", token);  // Debugging
+
+        // Check if the token exists
         if (!token) {
-            return res.status(200).json({
-                message: "User not logged in",
+            return res.status(401).json({
+                message: "User not logged in or token missing",
                 error: true,
                 success: false
             });
         }
 
-        jwt.verify(token, process.env.TOKEN_SECRET_KEY, function (err, decoded) {
+        // Verify the token
+        jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, decoded) => {
             if (err) {
-                console.log("JWT verification error", err);
+                console.log("JWT Verification Error:", err);  // Debugging
                 return res.status(403).json({
                     message: "Token is invalid or expired",
                     error: true,
@@ -23,20 +27,19 @@ async function authToken(req, res, next) {
                 });
             }
             
-            console.log("decoded", decoded);
+            console.log("Decoded Token Data:", decoded);  // Debugging
 
-            if (!req.user) {
-                req.user = {}; // Ensure req.user exists
-            }
-            
-            req.userId = decoded?._id; // Extract user ID from token
+            // Ensure req.user object exists
+            req.user = req.user || {};
+            req.userId = decoded?._id;  // Set the user ID from token payload
 
-            next();
+            next();  // Proceed to the next middleware/route handler
         });
 
     } catch (err) {
+        console.error("Authorization Middleware Error:", err);  // Debugging
         res.status(400).json({
-            message: err.message || err,
+            message: err.message || "Authorization error",
             data: [],
             error: true,
             success: false
