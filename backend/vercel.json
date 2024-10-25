@@ -1,18 +1,21 @@
 {
-    "version" : 2,
-    "name" : "AdminPanelK",
-    "builds" : [
-        {
-            "src" : "/index.js",
-            "use" : "@vercel/node"
-           
-        }
+    "version": 2,
+    "name": "AdminPanelK",
+    "builds": [
+      {
+        "src": "index.js", 
+        "use": "@vercel/node" 
+      }
     ],
-    "routes" : [
-        {
-            "src" : "/(.*)",
-            "dest" : "/"
-        }
+    "routes": [
+      {
+        "src": "/api/(.*)", 
+        "dest": "/index.js"  
+      },
+      {
+        "src": "/(.*)", 
+        "dest": "/index.js" 
+      }
     ]
-   
-}
+  }
+  
