@@ -9,7 +9,7 @@ const router = require('./routes');
 const app = express();
 
 // Define allowed origins
-const allowedOrigins = ['https://administrator-a9im-eex8lylu7-indhiran-gods-projects.vercel.app'];
+const allowedOrigins = ['https://administrator-a9im.vercel.app/'];
 
 // CORS configuration
 app.use(cors({
