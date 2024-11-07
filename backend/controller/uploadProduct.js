@@ -1,51 +1,64 @@
-const uploadProductPermission = require("../helpers/permission");
-const productModel = require("../models/productModel");
+const productModel = require('../models/productModel');
 
-async function UploadProductController(req, res) {
+async function uploadProduct(req, res) {
     try {
-        const sessionUserId = req.userId;
+        // Log the incoming request body
+        console.log("Incoming request body:", req.body);
 
-        // Check user permission
-        if (!uploadProductPermission(sessionUserId)) {
-            throw new Error("Permission denied");
+        // Destructure the data from the request body
+        const { productName, brandName, categoryId, subcategoryId, productImage, description, price, quantityOptions } = req.body;
+
+        // Validation checks to ensure all required fields are provided
+        if (!productName) {
+            return res.status(400).json({ message: 'Product name is required.', success: false });
+        }
+        if (!brandName) {
+            return res.status(400).json({ message: 'Brand name is required.', success: false });
+        }
+        if (!categoryId) {
+            return res.status(400).json({ message: 'Category ID is required.', success: false });
+        }
+        if (!productImage) {
+            return res.status(400).json({ message: 'Product image is required.', success: false });
+        }
+        if (!description) {
+            return res.status(400).json({ message: 'Description is required.', success: false });
+        }
+        if (!price) {
+            return res.status(400).json({ message: 'Price is required.', success: false });
+        }
+        if (!quantityOptions || quantityOptions.length === 0) {
+            return res.status(400).json({ message: 'Quantity options are required and must be an array with at least one option.', success: false });
         }
 
-        // Ensure that the required fields are present
-        const { productName, brandName, categoryId, subcategoryId, productImage, description, price, sellingPrice } = req.body;
-
-        if (!productName || !brandName || !categoryId || !subcategoryId || !productImage || !description || price == null || sellingPrice == null) {
-            throw new Error("All fields are required");
+        // Validate quantityOptions (it should be a non-empty array with objects containing quantity and price)
+        for (let option of quantityOptions) {
+            if (!option.quantity || !option.price) {
+                return res.status(400).json({ message: 'Each quantity option must include both quantity and price.', success: false });
+            }
         }
 
-        // Create a new product instance
-        const uploadProduct = new productModel({
+        // Create a new product instance based on the schema
+        const newProduct = new productModel({
             productName,
             brandName,
             categoryId,
-            subcategoryId,
+            subcategoryId, // This can be null, as it's optional
             productImage,
             description,
-            price,
-            sellingPrice
+            price, // Base price
+            quantityOptions // Array of quantity options
         });
 
         // Save the product to the database
-        const saveProduct = await uploadProduct.save();
+        const savedProduct = await newProduct.save();
 
-        res.status(201).json({
-            message: "Product uploaded successfully",
-            error: false,
-            success: true,
-            data: saveProduct
-        });
-
-    } catch (err) {
-        res.status(400).json({
-            message: err.message || err,
-            error: true,
-            success: false
-        });
+        // Return success response with the saved product data
+        res.status(201).json({ message: 'Product uploaded successfully', success: true, data: savedProduct });
+    } catch (error) {
+        console.error("Error uploading product:", error); // Log the error for debugging purposes
+        res.status(500).json({ message: error.message, success: false });
     }
 }
 
-module.exports = UploadProductController;
+module.exports = uploadProduct;
