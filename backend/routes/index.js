@@ -1,4 +1,3 @@
-// routes/api.js
 const express = require('express');
 const router = express.Router();
 const userSignUpController = require("../controller/userSignUp");
@@ -18,6 +17,8 @@ const addSubcategory = require('../controller/addSubcategory');
 const getAllSubcategories = require('../controller/getAllSubcategories');
 const getProductsBySubcategory = require('../controller/getProductsBySubcategory');
 const deleteSubcategory = require('../controller/deletesubcategory');
+const addCategory = require('../controller/addCategory');
+const updateCategoryController = require('../controller/updateCategoryController');
 
 // User routes
 router.post("/signup", userSignUpController); 
@@ -40,5 +41,7 @@ router.post('/add-subcategories/:categoryId', authToken, addSubcategory);
 router.get('/subcategories', getAllSubcategories);
 router.get('/subcategories/:subcategoryId/products', getProductsBySubcategory);
 router.delete('/delete-subcategory/:subcategoryId', authToken, deleteSubcategory);
+router.post('/addCategory', addCategory, authToken);
+router.put("/categories", authToken, updateCategoryController); 
 
 module.exports = router;
