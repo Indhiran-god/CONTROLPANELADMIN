@@ -19,6 +19,7 @@ const getProductsBySubcategory = require('../controller/getProductsBySubcategory
 const deleteSubcategory = require('../controller/deletesubcategory');
 const addCategory = require('../controller/addCategory');
 const updateCategoryController = require('../controller/updateCategoryController');
+const deleteCategory = require('../controller/deletecategory'); // Import deleteCategory controller
 
 // User routes
 router.post("/signup", userSignUpController); 
@@ -41,7 +42,8 @@ router.post('/add-subcategories/:categoryId', authToken, addSubcategory);
 router.get('/subcategories', getAllSubcategories);
 router.get('/subcategories/:subcategoryId/products', getProductsBySubcategory);
 router.delete('/delete-subcategory/:subcategoryId', authToken, deleteSubcategory);
-router.post('/addCategory', addCategory, authToken);
+router.post('/addCategory', authToken, addCategory);
 router.put("/categories", authToken, updateCategoryController); 
+router.delete('/delete-category/:categoryId', authToken, deleteCategory); // Delete category route
 
 module.exports = router;
