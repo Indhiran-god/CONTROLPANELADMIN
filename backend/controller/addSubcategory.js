@@ -1,21 +1,17 @@
-const Category = require('../models/Category'); // Import the Category model
+const Category = require('../models/Category');
 
-// Controller to add a subcategory to a specific category
 const addSubcategory = async (req, res) => {
     try {
-        const { categoryName } = req.body; // Get the category name from the request body
-        const { name, image } = req.body; // Get the subcategory name and image
+        const { categoryName, name, image } = req.body;
 
-        // Validate input
         if (!categoryName || !name || !image) {
-            return res.status(400).json({ success: false, message: 'Category name, subcategory name, and image are required.' });
+            return res.status(400).json({ success: false, message: 'All fields are required.' });
         }
 
-        // Find the category by name and add the new subcategory
         const updatedCategory = await Category.findOneAndUpdate(
             { name: categoryName },
             { $push: { subCategories: { name, image } } },
-            { new: true } // Return the updated document
+            { new: true }
         );
 
         if (!updatedCategory) {
@@ -24,10 +20,9 @@ const addSubcategory = async (req, res) => {
 
         res.json({ success: true, message: 'Subcategory added successfully', data: updatedCategory.subCategories });
     } catch (error) {
-        console.error('Error adding subcategory:', error);
+        console.error('Subcategory added successfully');
         res.status(500).json({ success: false, message: 'Server error' });
     }
 };
-
 
 module.exports = addSubcategory;
