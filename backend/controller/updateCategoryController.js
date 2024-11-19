@@ -3,21 +3,24 @@ const uploadCategoryPermission = require('../helpers/permission');
 
 async function updateCategoryController(req, res) {
   try {
+    // Check if the user has permission to update the category
     if (!uploadCategoryPermission(req.userId)) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const { id } = req.params; // Getting the category ID from route params
-    const { name } = req.body;
+    const { id } = req.params; // Get category ID from route parameters
+    const { name } = req.body; // Get category name from request body
     let image;
 
+    // Handle file uploads (assuming you use multer for image upload middleware)
     if (req.file) {
-      image = req.file.path; // Path where the file was saved (assuming you use multer for image uploads)
+      image = req.file.path; // File path from multer
     }
 
     const updateData = { name };
     if (image) updateData.image = image;
 
+    // Update category in the database
     const category = await categoryModel.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!category) {
