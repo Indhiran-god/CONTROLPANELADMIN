@@ -1,37 +1,28 @@
-const categoryModel = require('../models/Category');
-const uploadCategoryPermission = require('../helpers/permission');
+const Category = require('../models/Category'); // Assuming your model is located here
 
-async function updateCategoryController(req, res) {
-  try {
-    // Check if the user has permission to update the category
-    if (!uploadCategoryPermission(req.userId)) {
-      return res.status(403).json({ message: 'Forbidden' });
+// Edit a category
+const updateCategoryController = async (req, res) => {
+    try {
+        const { categoryId } = req.params; // Get category ID from URL params
+        const { name, categoryImage } = req.body; // Get updated data from request body
+
+        // Find and update the category
+        const updatedCategory = await Category.findByIdAndUpdate(
+            categoryId,
+            { name, categoryImage }, // Fields to update
+            { new: true } // Return the updated category
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        // Return the updated category
+        res.status(200).json({ success: true, message: 'Category updated successfully!', updatedCategory });
+    } catch (error) {
+        console.error('Error updating category:', error);
+        res.status(500).json({ success: false, message: 'Server error', error });
     }
-
-    const { id } = req.params; // Get category ID from route parameters
-    const { name } = req.body; // Get category name from request body
-    let image;
-
-    // Handle file uploads (assuming you use multer for image upload middleware)
-    if (req.file) {
-      image = req.file.path; // File path from multer
-    }
-
-    const updateData = { name };
-    if (image) updateData.image = image;
-
-    // Update category in the database
-    const category = await categoryModel.findByIdAndUpdate(id, updateData, { new: true });
-
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-
-    res.json({ success: true, message: 'Category updated successfully', category });
-  } catch (error) {
-    console.error('Error updating category:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-}
+};
 
 module.exports = updateCategoryController;
