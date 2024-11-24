@@ -7,7 +7,7 @@ const authToken = require('../middleware/authToken');
 const userLogout = require('../controller/userLogout');
 const allUsers = require('../controller/allUsers');
 const updateUser = require('../controller/updateUser');
-const UploadProduct = require('../controller/uploadProduct');
+const UploadProductController = require('../controller/uploadProduct');
 const updateProductController = require('../controller/updateProduct');
 const getProductController = require('../controller/getProduct');
 const deleteProductController = require('../controller/deleteproduct'); 
@@ -32,7 +32,7 @@ router.get("/all-user", authToken, allUsers);
 router.post("/update-user", authToken, updateUser); 
 
 // Product routes
-router.post("/upload-product", authToken, UploadProduct); 
+router.post("/upload-product", authToken, UploadProductController); 
 router.get("/get-product", getProductController); 
 router.put("/update-product", authToken, updateProductController); 
 router.delete("/delete-product/:id", authToken, deleteProductController); 
