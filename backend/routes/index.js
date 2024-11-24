@@ -44,7 +44,7 @@ router.get('/subcategories', getAllSubcategories);
 router.get('/subcategories/:subcategoryId/products', getProductsBySubcategory);
 router.delete('/delete-subcategory/:subcategoryId', authToken, deleteSubcategory);
 router.post('/addCategory', authToken, addCategory);
-router.put("/categories", authToken, updateCategoryController); 
+router.put("/categories/:categoryId", authToken, updateCategoryController); 
 router.delete('/delete-category/:categoryId', authToken, deleteCategory); // Delete category route
 
 module.exports = router;
