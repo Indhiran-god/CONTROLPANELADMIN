@@ -21,10 +21,14 @@ const categorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    categoryImage: {
+        type: [String], // Assuming images are stored as an array of strings
+        required: true // This is now correctly closed with a comma
+    },
     subCategories: {
         type: [subcategorySchema],
         required: true // Ensure this is set to true if subcategories are mandatory
-    },
+    }
 });
 
 const Category = mongoose.model('Category', categorySchema);
