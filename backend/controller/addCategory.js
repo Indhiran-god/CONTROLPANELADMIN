@@ -1,3 +1,5 @@
+// controller/addCategory.js
+
 const Category = require('../models/Category'); // Import the Category model
 
 // Controller to add a new category
@@ -13,8 +15,8 @@ const addCategory = async (req, res) => {
         // Create a new category object
         const newCategory = new Category({
             name,
-            images,
-            subCategories: subCategories || [] // If no subcategories are provided, default to an empty array
+            categoryImage: images,  // Store image URLs
+            subCategories: subCategories || []  // Optional: Store subcategories if provided
         });
 
         // Save the new category to the database
@@ -28,4 +30,4 @@ const addCategory = async (req, res) => {
     }
 };
 
-module.exports =  addCategory ;
+module.exports = addCategory;
