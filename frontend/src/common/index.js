@@ -70,6 +70,10 @@ const SummaryApi = {
         url: `${backendDomin}/api/add-subcategories/:categoryId`,
         method: 'POST',
     },
+     updateSubcategory: {
+    url: `${backendDomin}/api/update-subcategory`,  // URL to update a subcategory
+    method: "put",
+},
 };
 
 export default SummaryApi;
