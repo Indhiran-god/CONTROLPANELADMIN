@@ -59,4 +59,3 @@ const updateSubcategoryController = async (req, res) => {
 };
 
 module.exports = updateSubcategoryController;
-
