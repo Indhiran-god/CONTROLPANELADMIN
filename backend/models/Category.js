@@ -5,7 +5,7 @@ const subcategorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
+    images: {
         type: [String], // Assuming images are stored as an array of strings
         required: true // Ensure this is set to true if image is mandatory
     },
