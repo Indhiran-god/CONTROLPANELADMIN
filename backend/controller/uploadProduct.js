@@ -18,9 +18,7 @@ async function uploadProduct(req, res) {
         if (!productImage) {
             return res.status(400).json({ message: 'Product image is required.', success: false });
         }
-        if (!price) {
-            return res.status(400).json({ message: 'Price is required.', success: false });
-        }
+       
         if (!quantityOptions || quantityOptions.length === 0) {
             return res.status(400).json({ message: 'Quantity options are required and must be an array with at least one option.', success: false });
         }
