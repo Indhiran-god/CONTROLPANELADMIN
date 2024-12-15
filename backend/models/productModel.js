@@ -7,7 +7,8 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     brandName: {
-        type: String
+        type: String,
+        required: false
     },
     categoryId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,7 +25,7 @@ const productSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-
+        required: false
     },
     price: {
         type: Number,
