@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true // Base price
+        required: false // Base price
     },
     quantityOptions: [
         {
