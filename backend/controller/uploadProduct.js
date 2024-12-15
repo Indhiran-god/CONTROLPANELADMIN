@@ -12,17 +12,11 @@ async function uploadProduct(req, res) {
         if (!productName) {
             return res.status(400).json({ message: 'Product name is required.', success: false });
         }
-        if (!brandName) {
-            return res.status(400).json({ message: 'Brand name is required.', success: false });
-        }
         if (!categoryId) {
             return res.status(400).json({ message: 'Category ID is required.', success: false });
         }
         if (!productImage) {
             return res.status(400).json({ message: 'Product image is required.', success: false });
-        }
-        if (!description) {
-            return res.status(400).json({ message: 'Description is required.', success: false });
         }
         if (!price) {
             return res.status(400).json({ message: 'Price is required.', success: false });
@@ -41,11 +35,11 @@ async function uploadProduct(req, res) {
         // Create a new product instance based on the schema
         const newProduct = new productModel({
             productName,
-            brandName,
+            brandName, // brandName is optional
             categoryId,
             subcategoryId, // This can be null, as it's optional
             productImage,
-            description,
+            description, // description is optional
             price, // Base price
             quantityOptions // Array of quantity options
         });
