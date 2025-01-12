@@ -17,29 +17,13 @@ const updateSubcategoryController = async (req, res) => {
         const subcategoryObjectId = new mongoose.Types.ObjectId(subcategoryId);
         const newCategoryObjectId = new mongoose.Types.ObjectId(newCategoryId);
 
+        // Find the target category directly
         const targetCategory = await Category.findById(newCategoryObjectId);
         if (!targetCategory) {
             return res.status(404).json({ message: 'Target category not found' });
         }
 
-        const originalCategory = await Category.findOne({ 'subCategories._id': subcategoryObjectId });
-        if (!originalCategory) {
-            return res.status(404).json({ message: 'Subcategory not found in the original category' });
-        }
-
-        // Find the subcategory in the original category
-        const subcategoryToMove = originalCategory.subCategories.find(sub => sub._id.equals(subcategoryObjectId));
-        if (!subcategoryToMove) {
-            return res.status(404).json({ message: 'Subcategory not found in the original category' });
-        }
-
-        // Remove the subcategory from its original category
-        originalCategory.subCategories = originalCategory.subCategories.filter(
-            (sub) => !sub._id.equals(subcategoryObjectId)
-        );
-        await originalCategory.save();
-
-        // Prepare the updated subcategory object
+        // Update the subcategory directly in the new category
         const updatedSubcategory = {
             _id: subcategoryObjectId,
             name: name,
@@ -47,9 +31,17 @@ const updateSubcategoryController = async (req, res) => {
             images: subcategoryImage || [], // Handle images correctly
         };
 
-        // Add the updated subcategory to the new category
-        targetCategory.subCategories.push(updatedSubcategory);
-        await targetCategory.save();
+        // Update the original category by pulling the subcategory
+        await Category.updateOne(
+            { 'subCategories._id': subcategoryObjectId },
+            { $pull: { subCategories: { _id: subcategoryObjectId } } }
+        );
+
+        // Add the subcategory to the new category
+        await Category.updateOne(
+            { _id: newCategoryObjectId },
+            { $push: { subCategories: updatedSubcategory } }
+        );
 
         return res.status(200).json({ success: true, message: 'Subcategory updated successfully' });
     } catch (error) {
@@ -59,3 +51,4 @@ const updateSubcategoryController = async (req, res) => {
 };
 
 module.exports = updateSubcategoryController;
+
